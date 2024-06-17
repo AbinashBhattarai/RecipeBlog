@@ -7,23 +7,21 @@ namespace ProjectBugTrackerAPI.Mappers
     {
         public static CompanyDto ToCompanyDto(this Company company)
         {
-            return new CompanyDto 
-            { 
+            return new CompanyDto
+            {
                 Id = company.Id,
                 Code = company.Code,
-                Details = company.Details
+                Details = company.Details,
             };
-
         }
 
-        public static Company ToCompanyModel(this CreateCompanyDto dto)
+        public static Company AsCompanyModel(this CreateCompanyDto dto)
         {
             return new Company
             {
                 Code = dto.Code,
                 Details = dto.Details
             };
-
         }
     }
 }

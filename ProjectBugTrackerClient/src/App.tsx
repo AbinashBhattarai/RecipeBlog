@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom"
+import Dashboard from "./pages/dashboard/Dashboard";
+import Company from "./pages/company/Company";
+import Customer from "./pages/customer/Customer";
+import Employee from "./pages/employee/Employee";
+import Project from "./pages/project/Project";
+import Navbar from "./components/navbar/Navbar";
+import Menu from "./components/menu/Menu";
+import Footer from "./components/footer/Footer";
+import './styles/global.scss'
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  const Layout = () => {
+    return(
+      <div className="main">
+        <Navbar />
+
+        <div className="container">
+          <div className="menu-container">
+            <Menu />
+          </div>
+          <div className="content-container">
+            <Outlet />
+          </div>
+        </div>
+
+        <Footer />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  };
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Layout />,
+      children: [
+        {
+          path: '/',
+          element: <Dashboard />
+        },
+        {
+          path: '/company',
+          element: <Company />
+        },
+        {
+          path: '/customer',
+          element: <Customer />
+        },
+        {
+          path: '/employee',
+          element: <Employee />
+        },
+        {
+          path: '/project',
+          element: <Project />
+        }
+      ]
+    }
+  ]);
+
+  return (<RouterProvider router={router}/>);
 }
 
 export default App

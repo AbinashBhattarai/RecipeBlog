@@ -1,87 +1,147 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProjectBugTrackerAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjectBugTrackerAPI.Dtos;
 using ProjectBugTrackerAPI.Mappers;
-using ProjectBugTrackerAPI.Models;
+using ProjectBugTrackerAPI.Repository.Interface;
 
 namespace ProjectBugTrackerAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Company")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ICompanyRepository _companyRepository;
+        private readonly ILogger _logger;
 
-        public CompanyController(AppDbContext context)
+        public CompanyController(ICompanyRepository companyRepository, ILogger<CompanyController> logger)
         {
-            _context = context;
+            _companyRepository = companyRepository;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetAllCompanies()
+        [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCompanies()
         {
-            var companies = await _context.Company
-                .Select(c => c.ToCompanyDto())
-                .ToListAsync();
-            return Ok(companies);
-        }
-
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<ActionResult<Company>> GetCompanyById(int id)
-        {
-            var company = await _context.Company
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (company == null)
+            try
             {
-                return NotFound("Product Not Fount");
+                var result = await _companyRepository.GetAllCompanies();
+                var companies = result.Select(c => c.ToCompanyDto())
+                                .ToList();
+                return Ok(companies);
             }
-            return Ok(company.ToCompanyDto());
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetCompanies)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error, please try again");
+            }
+        }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCompany([FromRoute] int id)
+        {
+            try
+            {
+                var company = await _companyRepository.GetCompanyById(id);
+                if (company == null)
+                {
+                    return NotFound("Company Not Found");
+                }
+                return Ok(company.ToCompanyDto());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(GetCompany)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error, please try again");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCompany(CreateCompanyDto createCompanyDto)
+        [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateCompany([FromBody] CreateCompanyDto companyDto)
         {
-            var company = createCompanyDto.ToCompanyModel();
-            await _context.Company.AddAsync(company);
-            await _context.SaveChangesAsync();
-            return Ok("Product Added Successfully");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var code = await _companyRepository.GetCompanyByCode(companyDto.Code);
+                if (code != null)
+                {
+                    ModelState.AddModelError("Code", "Company code already in use");
+                    return BadRequest(ModelState);
+                }
+                var company = companyDto.AsCompanyModel();
+                var result = await _companyRepository.AddCompany(company);
+                return CreatedAtAction(nameof(GetCompany), new { id = result.Id }, result.ToCompanyDto());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(CreateCompany)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error, please try again");
+            }
         }
 
         [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> UpdateCompany(int id, CompanyDto dto)
+        [Route("{id:int}")]
+        [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateCompany([FromRoute] int id, [FromBody] UpdateCompanyDto dto)
         {
-            var company = await _context.Company.FirstOrDefaultAsync(c => c.Id == id);
-
-            if(company == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound("Product Not Found");
+                return BadRequest(ModelState);
             }
-            company.Code = dto.Code;
-            company.Details = dto.Details;
-            await _context.SaveChangesAsync();
+            try
+            {
+                var result = await _companyRepository.UpdateCompany(id, dto);
 
-            return Ok("Product Updated Successfully");
+                if (result == null)
+                {
+                    return NotFound("Company Not Found");
+                }
+                return Ok(result.ToCompanyDto());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateCompany)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error, please try again");
+            }
         }
 
         [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> DeleteCompany(int id)
+        [Route("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteCompany([FromRoute] int id)
         {
-            var company = await _context.Company.FirstOrDefaultAsync(c => c.Id == id);
-
-            if (company == null)
+            try
             {
-                return NotFound("Product Not Found");
-            }
-            _context.Company.Remove(company);
-            await _context.SaveChangesAsync();
+                bool result = await _companyRepository.DeleteCompany(id);
 
-            return Ok("Product Deleted Successfully");
+                if (!result)
+                {
+                    return NotFound("Company Not Found");
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(DeleteCompany)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error, please try again");
+            }
         }
     }
 }

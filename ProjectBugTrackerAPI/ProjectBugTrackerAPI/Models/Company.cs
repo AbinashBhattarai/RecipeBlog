@@ -7,18 +7,10 @@ namespace ProjectBugTrackerAPI.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(10)]
+        [StringLength(10)]
         public string Code { get; set; }
 
-        [Required]
-        [MaxLength(255)]
+        [StringLength(255)]
         public string Details { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
-        public ICollection<Project> Projects { get; set; } = [];
-        public ICollection<Customer> Customers { get; set; } = [];
     }
 }
