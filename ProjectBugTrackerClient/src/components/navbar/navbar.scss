@@ -1,0 +1,61 @@
+@import '../../styles/mixin';
+
+
+.navbar{
+  width: 100%;
+  @include flex($justify:space-between);
+  @include wrapper();
+
+  .logo{
+    @include flex($gap:1rem);
+    cursor: pointer;
+    
+    img{
+      @include avatar($height:2rem, $width:2.3rem, $border:10%);
+    }
+
+    span{
+      font-size: 1.5rem;
+    }
+    
+  }
+
+  .icons{
+    @include flex($justify:end, $gap:2rem);
+
+    .icon-container{
+      position: relative;
+      @include avatar();
+      @include flex($justify:center);
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      span{
+        font-size: 1rem;
+      }
+    }
+    .icon-container:hover{
+      background-color: $soft-bg;
+    }
+
+    .icon{
+      font-size: 1.3rem;
+      position: relative;
+    }
+
+    .count{
+      @include count();
+    }
+
+    .user-icon{
+      @include flex($gap:0.7rem);
+
+      img{
+        @include avatar();
+      }
+      span{
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

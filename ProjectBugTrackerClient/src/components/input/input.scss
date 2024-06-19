@@ -1,0 +1,19 @@
+@import '../../styles/mixin';
+@import '../../styles/variables.scss';
+
+.search-input{
+  width: 20rem;
+  border-radius: 1rem;
+  @include border(full);
+
+  input{
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.3rem;
+    color: $main-text;
+    border-radius: 1rem;
+    background-color: $main-bg;
+    @include wrapper($tb:0.3rem, $lr:1rem);
+  }
+}

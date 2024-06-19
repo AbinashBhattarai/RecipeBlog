@@ -1,0 +1,18 @@
+@import '../../styles/mixin';
+
+.footer{
+  @include flex($justify:space-between);
+  @include wrapper();
+  @include border($dir:top);
+
+  .user-icon{
+    @include flex($gap:0.7rem);
+
+    img{
+      @include avatar();
+    }
+    span{
+      font-size: 1.2rem;
+    }
+  }
+}

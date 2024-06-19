@@ -1,0 +1,21 @@
+@import '../../styles/mixin';
+@import '../../styles/variables.scss';
+
+.main{
+  background-color: $main-bg;
+  color: $main-text;
+}
+
+.container{
+  @include flex();
+  @include border($dir:top);
+}      
+.menu-container{
+  @include wrapper();
+  width: 14rem;
+  @include border($dir:right);
+}
+.content-container{
+  @include wrapper();
+  width: 100%;
+}
