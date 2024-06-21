@@ -7,15 +7,13 @@
 }
 
 .container{
-  @include flex();
-  @include border($dir:top);
+  @include flex($align:start);
 }      
 .menu-container{
-  @include wrapper();
   width: 14rem;
   @include border($dir:right);
 }
 .content-container{
-  @include wrapper();
   width: 100%;
+  @include border(top);
 }

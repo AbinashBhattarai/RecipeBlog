@@ -4,7 +4,6 @@
 .navbar{
   width: 100%;
   @include flex($justify:space-between);
-  @include wrapper();
 
   .logo{
     @include flex($gap:1rem);
@@ -22,6 +21,7 @@
 
   .icons{
     @include flex($justify:end, $gap:2rem);
+    color: $soft-text;
 
     .icon-container{
       position: relative;
@@ -55,6 +55,7 @@
       }
       span{
         font-size: 1.2rem;
+        color: $main-text;
       }
     }
   }

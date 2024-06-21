@@ -8,19 +8,19 @@ import './layout.scss'
 const Layout = () => {
   return (
     <div className="main">
-        <Navbar />
+      <Navbar />
 
-        <div className="container">
-          <div className="menu-container">
-            <Menu />
-          </div>
-          <div className="content-container">
-            <Outlet />
-          </div>
+      <div className="container">
+        <div className="menu-container">
+          <Menu />
         </div>
-
-        <Footer />
+        <div className="content-container wrapper">
+          <Outlet />
+        </div>
       </div>
+
+      <Footer />
+    </div>
   )
 }
 

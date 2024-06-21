@@ -3,7 +3,11 @@ import './employee.scss'
 
 const Employee = () => {
   return (
-    <div>Employee</div>
+    <div className='employee'>
+      <div className='title'>
+        Employee
+      </div>
+    </div>
   );
 };
 

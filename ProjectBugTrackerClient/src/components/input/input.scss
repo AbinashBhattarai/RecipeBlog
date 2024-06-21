@@ -5,6 +5,7 @@
   width: 20rem;
   border-radius: 1rem;
   @include border(full);
+  @include flex($justify:space-between);
 
   input{
     width: 100%;
@@ -14,6 +15,10 @@
     color: $main-text;
     border-radius: 1rem;
     background-color: $main-bg;
-    @include wrapper($tb:0.3rem, $lr:1rem);
+    padding: 0 1rem;
+
+    &::placeholder{
+      color: $soft-text;
+    }
   }
 }

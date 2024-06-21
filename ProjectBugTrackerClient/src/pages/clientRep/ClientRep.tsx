@@ -3,7 +3,11 @@ import './clientRep.scss'
 
 const Customer = () => {
   return (
-    <div>ClientRep</div>
+    <div className='clientRep'>
+      <div className='title'>
+        Client Representative
+      </div>
+    </div>
   );
 };
 

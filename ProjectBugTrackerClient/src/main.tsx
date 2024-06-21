@@ -8,6 +8,10 @@ import Employee from "./pages/employee/Employee";
 import Project from "./pages/project/Project";
 import Layout from './pages/layout/Layout';
 import './styles/global.scss';
+import Support from './pages/support/Support';
+import Issue from './pages/Issue/Issue';
+import AddClient from './pages/addClient/AddClient';
+import EditClient from './pages/editClient/EditClient';
 
 
 const router = createBrowserRouter([
@@ -20,8 +24,16 @@ const router = createBrowserRouter([
           element: <Dashboard />
         },
         {
-          path: '/client',
-          element: <Client />
+          path: '/client/',
+          element: <Client />,
+        },
+        {
+          path: '/client/add',
+          element: <AddClient />
+        },
+        {
+          path: '/client/edit/:id',
+          element: <EditClient />
         },
         {
           path: '/clientRep',
@@ -34,8 +46,16 @@ const router = createBrowserRouter([
         {
           path: '/project',
           element: <Project />
+        },
+        {
+          path: '/issue',
+          element: <Issue />
+        },
+        {
+          path: '/support',
+          element: <Support />
         }
-      ]
+      ],
     }
   ]);
 

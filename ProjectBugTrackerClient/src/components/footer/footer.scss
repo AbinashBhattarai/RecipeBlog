@@ -2,8 +2,7 @@
 
 .footer{
   @include flex($justify:space-between);
-  @include wrapper();
-  @include border($dir:top);
+  @include border(top);
 
   .user-icon{
     @include flex($gap:0.7rem);

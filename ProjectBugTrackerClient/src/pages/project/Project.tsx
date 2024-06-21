@@ -3,7 +3,11 @@ import './project.scss'
 
 const Project = () => {
   return (
-    <div>Project</div>
+    <div className='project'>
+      <div className='title'>
+        Project
+      </div>
+    </div>
   );
 };
 

@@ -16,7 +16,9 @@ namespace ProjectBugTrackerAPI.Repository.Implementation
 
         public async Task<IEnumerable<Company>> GetAllCompanies()
         {
-            return await _context.Company.ToListAsync();
+            return await _context.Company
+                .OrderByDescending(id =>  id)
+                .ToListAsync();
         }
 
         public async Task<Company?> GetCompanyById(int id)
