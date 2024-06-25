@@ -1,0 +1,26 @@
+@import '../../styles/mixin';
+@import '../../styles/variables.scss';
+
+
+.search{
+  flex: 1;
+  @include flex($align:center, $gap: 1rem);
+  padding: 0.3rem 1.3rem;
+  border-radius: 5px;
+  background-color: $dark-bg;
+
+  .icon{
+    &:active{
+      background-color: $soft-bg;
+      border-radius: 50%;
+    }
+  }
+
+  input{
+    width: 100%;
+    font-size: 1.2rem;
+    border: none;
+    outline: none;
+    background-color: $dark-bg;
+  }
+}

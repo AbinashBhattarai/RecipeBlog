@@ -1,0 +1,76 @@
+@import '../../styles/mixin';
+@import '../../styles/variables.scss';
+
+.navbar{
+  background-color: $main-bg;
+  color: $main-text;
+  @include flex($align:center);
+
+  .logo{
+    @include flex($align:center, $gap:0.3rem);
+    width: 13.8rem;
+    border-right: 3px solid $dark-bg;
+
+    .logo-text{
+      @include flex($dir:column);
+
+      font-size: 1.5rem;
+      font-weight: bold;
+      line-height: 1.4rem;
+    }
+  }
+
+  .navbar-content{
+    width: 100%;
+    @include flex($justify:space-between, $align:center);
+
+    .icons{
+      flex: 2;
+      @include flex($align:center, $justify:end, $gap:2rem);
+
+      .icon-container{
+        @include round();
+        @include flex($justify:center, $align:center);
+        cursor: pointer;
+        transition: background-color 0.2s;
+        position: relative;
+
+        &:hover{
+          background-color: $soft-bg;
+        }
+        &:active{
+          background-color: $dark-bg;
+        }
+
+        span{
+          @include round($size:1.3rem);
+          @include flex($justify:center, $align:center);
+          background-color: rgb(255, 35, 35);
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+      }
+
+      .user-icon{
+        @include flex($align:center, $gap:0.7rem);
+
+        img{
+          @include round($size:2.5rem);
+          object-fit: cover;
+        }
+
+        span{
+          font-weight: bold;
+          color: $secondary-text;
+        }
+
+        .icon{
+          color: $secondary-text;
+        }
+      }
+    }
+  }
+}

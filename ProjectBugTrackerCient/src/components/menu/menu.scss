@@ -1,0 +1,35 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixin';
+
+.menu{
+  background-color: $main-bg;
+  border-top: 3px solid $dark-bg;
+  padding-top: 2.5rem;
+  @include flex($dir:column, $gap:1.3rem);
+
+  .menu-item{
+    @include flex($align:center, $gap:0.7rem);
+
+    &:hover{
+      background-image: linear-gradient(to right, rgb(191, 191, 244), rgb(242, 242, 255));
+      color: $secondary-text;
+
+      .icon{
+        color: $secondary-text;
+      }
+    }
+
+    span{
+      font-size: 1.2rem;
+    }
+  }
+
+  .active{
+    background-image: linear-gradient(to right, rgb(191, 191, 244), rgb(242, 242, 255));
+    color: $secondary-text;
+    .icon{
+      color: $secondary-text;
+    }
+  }
+}
+

@@ -10,8 +10,8 @@ namespace ProjectBugTrackerAPI.DataContext
 
         }
 
-        public DbSet<Company> Company { get; set; }
-        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Client> Client { get; set; }
+        public DbSet<ClientRep> ClientRep { get; set; }
         public DbSet<Project> Project { get; set; }
         public DbSet<Employee> Employee { get; set; }
     }

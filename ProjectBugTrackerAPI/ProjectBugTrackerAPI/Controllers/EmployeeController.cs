@@ -6,7 +6,7 @@ using ProjectBugTrackerAPI.Repository.Interface;
 
 namespace ProjectBugTrackerAPI.Controllers
 {
-    [Route("api/Employee")]
+    [Route("api/employee")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
