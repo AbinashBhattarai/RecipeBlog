@@ -1,0 +1,17 @@
+﻿@model Comment
+
+
+<div class="d-flex gap-3" id="comment">
+    <img src="@("/Images/"+Model.AppUser.Image)" alt="user pic" class="image" asp-append-version="true" />
+    <div class="d-flex flex-column align-items-start">
+        <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.AppUserId" class="fw-bold text-decoration-none" data-bs-toggle=" tooltip" data-bs-placement="top" title="View Profile" style="cursor:pointer;">
+            @Model.AppUser.UserName
+        </a>
+        <span class="fs-5">@Model.Description</span>
+        <span class="text-black-50">
+            @Model.PostedOn.ToLongDateString()
+            <a class="ms-3 text-decoration-none" style="cursor:pointer">Reply</a>
+        </span>
+    </div>
+</div>
+

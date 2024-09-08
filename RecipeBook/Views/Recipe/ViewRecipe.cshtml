@@ -1,0 +1,128 @@
+﻿@model Recipe
+@inject SignInManager<AppUser> signInManager
+@inject UserManager<AppUser> userManager
+
+<div class="py-3 text-center border-bottom">
+    <h1 class="fw-bold mb-3">@Model.Name</h1>
+    <img src="@("~/images/"+Model.Image)" class="w-50 border border-white border-2 shadow mb-3" style="height:auto;" asp-append-version="true" />
+    <p class="fw-bold fs-5 mb-3">
+        @Model.Category
+    </p>
+    <p class="fw-bold fs-4 mb-3 text-md-start">@Model.Description</p>
+
+    <h3 class="text-danger pt-3 text-md-start">Ingredients:</h3>
+    <div class="fs-5 fw-bold shadow rounded p-3 text-start mb-3">
+        @foreach (var ingredient in Model.Ingredients)
+        {
+            <p>
+                <i class="bi bi-arrow-return-right"></i>
+                <span>@ingredient.Quantity</span>
+                <span>@ingredient.Unit</span>
+                <span>@ingredient.Item</span>
+            </p>
+        }
+    </div>
+
+    <h3 class="text-danger pt-3 text-md-start">Instructions:</h3>
+    <div class="fs-5 fw-bold shadow rounded p-3 text-start mb-4">
+        @foreach (var instruction in Model.Instructions)
+        {
+            <p>
+                <i class="bi bi-arrow-return-right"></i>
+                @instruction.Direction
+            </p>
+        }
+    </div>
+
+    <p class="text-start fs-5 mb-0 mt-5"><span>@Model.Likes.Count Likes</span><span class="ms-3">@Model.Comments.Count Comments</span></p>
+
+    <h4 class="text-start">Comments:</h4>
+    <div class="text-start pt-3 d-flex flex-column gap-3" id="comment-container">
+        @foreach(var comment in Model.Comments)
+        {
+            <div class="d-flex gap-3" id="comment">
+                <img src="@("/Images/"+comment.AppUser.Image)" alt="user pic" class="image" asp-append-version="true" />
+                <div class="d-flex flex-column align-items-start">
+                    <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.AppUserId" class="fw-bold text-decoration-none" data-bs-toggle=" tooltip" data-bs-placement="top" title="View Profile" style="cursor:pointer;">
+                        @comment.AppUser.UserName
+                    </a>
+                    <span class="fs-5">@comment.Description</span>
+                    <span class="text-black-50">
+                        @comment.PostedOn.ToLongDateString()
+                        <a class="ms-3 text-decoration-none" style="cursor:pointer">Reply</a>
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+  
+    @if (signInManager.IsSignedIn(User))
+    {        
+        <div class="d-flex align-items-center justify-content-center gap-2 mx-auto mx-md-0 mt-3">
+            <i class="@(ViewData["likeClass"])" style="color:hotpink;font-size:1.5rem;" id="likeBtn"></i>
+            <span id="likeCount">@Model.Likes.Count</span>
+        </div>
+        <div class="form-group mt-2">
+            <textarea class="form-control" id="comment-box" rows="2" placeholder="Add Comment"></textarea>
+            <div class="text-start mt-2">
+                <button class="btn btn-primary" id="post-comment">Post Comment</button>
+            </div>
+            
+        </div>
+    }
+    else
+    {
+        <a class="fs-5 fw-bold" asp-controller="Account" asp-action="Login" asp-route-recipeId="@Model.Id">Login to like and comment!!</a>
+    }
+
+    <p class="fw-bold fs-5 text-md-start mt-5">Recipe Created By:</p>
+    <div class="d-flex gap-3 justify-content-center justify-content-md-start">
+        <img src="@("/Images/"+Model.AppUser.Image)" alt="user pic" class="image" asp-append-version="true" />
+        <div class="d-flex flex-column align-items-start">
+            <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.AppUserId" class="fw-bold text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="top" title="View Profile" style="cursor:pointer;">
+                @Model.AppUser.UserName <span class="text-dark">(@Model.AppUser.FullName)</span>
+            </a>
+            <span>@Model.PostedOn.ToLongDateString()</span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $('#likeBtn').click(function () {
+            var recipeId = @Model.Id
+            $.ajax({
+                type: 'GET',
+                url: '/recipe/ToggleLike?id=' + recipeId,
+                success: function (result) {
+                    $('#likeCount').empty()
+                    $('#likeCount').text(result.likeCount)
+                    $('#likeBtn').removeClass().addClass(result.mes)
+                    console.log(result)
+                },
+                error: function (error) {
+                    $('#likeCount').empty()
+                    $('#likeCount').text(error.responseText)
+                }
+            })
+        });
+
+        $('#post-comment').click(function(){
+            var data = {
+                description: $('#comment-box').val(),
+                recipeId: @Model.Id,
+            };
+            $.ajax({
+                type: 'GET',
+                url: '/recipe/addcomment',
+                data: $.param(data),
+                success: function (result) {
+                    $('#comment-container').append(result)
+                    $('#comment-box').val(" ")
+                }
+            })
+        });
+
+    </script>
+}

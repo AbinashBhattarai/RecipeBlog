@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Recipe>
+
+@if (Model.Count() > 0)
+{
+    <div class="pt-2 d-flex flex-wrap gap-5 justify-content-center justify-content-md-start">
+        @foreach (var recipe in Model)
+        {
+            <div class="card rounded shadow" style="width:18rem;">
+                <img class="card-img-top" src="@("~/images/"+recipe.Image)" alt="food pic" style="object-fit:cover;height:10rem;width:100%;" asp-append-version="true" />
+                <div class="card-body">
+                    @* <div class="d-flex justify-content-between align-items-baseline">
+                        <h5 class="card-title">@recipe.Name</h5>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-hand-thumbs-up-fill"></i>
+                            <span>@recipe.LikeCount</span>
+                        </div>
+                    </div> *@
+                    <h5 class="card-title">@recipe.Name</h5>
+                    <div class="d-flex gap-3 pt-2 pb-3">
+                        <img src="@("/Images/"+recipe.AppUser.Image)" alt="user pic" asp-append-version="true" class="image" />
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold">@recipe.AppUser.FullName</span>
+                            <span>@recipe.PostedOn.ToLongDateString()</span>
+                        </div>
+                    </div>
+                    <a asp-controller="Recipe" asp-action="ViewRecipe" asp-route-id="@recipe.Id" class="btn btn-primary w-100">View</a>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Recipe>
+
+<div class="pt-2 d-flex flex-wrap gap-5 justify-content-center justify-content-md-start">
+    @foreach (var recipe in Model)
+    {
+        <div class="card rounded shadow" style="width:18rem;">
+            <img class="card-img-top" src="@("~/images/"+recipe.Image)" alt="food pic" style="object-fit:cover;height:10rem;width:100%;" asp-append-version="true" />
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline">
+                    <h5 class="card-title">@recipe.Name</h5>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-heart-fill" style="color:hotpink;"></i>
+                        <span>@recipe.Likes.Count</span>
+                    </div>
+                </div>
+                <div class="d-flex gap-3 pt-2 pb-3">
+                    <img src="@("/Images/"+recipe.AppUser.Image)" alt="user pic" asp-append-version="true" class="image" />
+                    <div class="d-flex flex-column">
+                        <span class="fw-bold">@recipe.AppUser.FullName</span>
+                        <span style="font-size:0.8rem;">@recipe.PostedOn.ToLongDateString()</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <a asp-controller="Recipe" asp-action="ViewRecipe" asp-route-id="@recipe.Id" class="btn btn-primary">View</a>
+                    <a asp-controller="Recipe" asp-action="ViewRecipe" asp-route-id="@recipe.Id" class="btn btn-success">Edit</a>
+                    <a asp-controller="Recipe" asp-action="ViewRecipe" asp-route-id="@recipe.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

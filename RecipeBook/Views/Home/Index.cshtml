@@ -1,0 +1,45 @@
+﻿@model HomeViewModel
+
+
+<div class="pt-5">
+    <div class="input-group mb-3 w-50 mx-auto shadow rounded">
+        <input type="text" class="form-control fs-5  text-capitalize" placeholder="Today's Recipe" />
+        <button class="btn btn-secondary" type="button">Search</button>
+    </div>
+
+    <div class="py-3 text-center">
+        <a class="btn btn-secondary" style="width:100px;" asp-controller="Recipe" asp-action="Index">Popular</a>
+        <a class="text-white btn btn-danger" style="width:100px;" asp-area="" asp-controller="Recipe" asp-action="Index" asp-route-searchString="Following">Following</a>
+    </div>
+
+    @if (Model.VegetarianRecipes.Count() > 0)
+    {      
+        <div class="pb-5 border-dark-50 border-bottom">
+            <div class="d-flex flex-wrap gap-2 align-items-baseline justify-content-center justify-content-md-between">
+                <p class="fw-bold fs-3">Vegetarian</p>
+                <a asp-area="" asp-controller="Recipe" asp-action="Index" asp-route-searchString="Vegetarian" class="btn btn-primary">See all</a>
+            </div>
+            <partial name="_DisplayProductPartial" model="Model.VegetarianRecipes" />
+        </div>
+    }
+    @if (Model.NonVegetarianRecipes.Count() > 0)
+    {
+        <div class="pb-5 border-dark-50 border-bottom mt-3">
+            <div class="d-flex flex-wrap gap-2 align-items-baseline justify-content-center justify-content-md-between">
+                <p class="fw-bold fs-3">Non Vegetarian</p>
+                <a asp-area="" asp-controller="Recipe" asp-action="Index" asp-route-searchString="NonVegetarian" class="btn btn-primary">See all</a>
+            </div>
+            <partial name="_DisplayProductPartial" model="Model.NonVegetarianRecipes" />
+        </div>
+    }
+    @if (Model.VeganRecipes.Count() > 0)
+    {
+        <div class="pb-5 border-dark-50 border-bottom mt-3">
+            <div class="d-flex flex-wrap gap-2 align-items-baseline justify-content-center justify-content-md-between">
+                <p class="fw-bold fs-3">Vegan</p>
+                <a asp-area="" asp-controller="Recipe" asp-action="Index" asp-route-searchString="Vegan" class="btn btn-primary">See all</a>
+            </div>
+            <partial name="_DisplayProductPartial" model="Model.VeganRecipes" />
+        </div>
+    }
+</div>
